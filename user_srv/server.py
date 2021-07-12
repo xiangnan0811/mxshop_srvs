@@ -10,6 +10,7 @@ import os
 import sys
 import signal
 import logging
+import argparse
 from concurrent import futures
 
 import grpc
@@ -28,15 +29,34 @@ def on_exit(signal, frame):
 
 
 def serve():
+    # 参数解析
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--host",
+        nargs="?",
+        type=str,
+        default="127.0.0.1",
+        help="binding host"
+    )
+    parser.add_argument(
+        "--port",
+        nargs="?",
+        type=int,
+        default=8078,
+        help="the listening port"
+    )
+    args = parser.parse_args()
+    # 日志文件
     logger.add("logs/user_srv_{time}.log", format="{time:YYYY-MM-DD HH:MM:SS} | {level} | {message}", encoding="utf-8")
+    # grpc服务
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     user_pb2_grpc.add_UserServicer_to_server(UserServicer(), server)
-    server.add_insecure_port('[::]:8078')
+    server.add_insecure_port(f'{args.host}:{args.port}')
 
     # 主进程退出信号监听 并优雅退出
     signal.signal(signal.SIGINT, on_exit)               # Control + C
     signal.signal(signal.SIGTERM, on_exit)              # kill
-    logger.info(f"启动服务：127.0.0.1:8078")
+    logger.info(f"启动服务：{args.host}:{args.port}")
     server.start()
     server.wait_for_termination()
 
