@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'Z\nuser/proto',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\nuser.proto\x1a\x1bgoogle/protobuf/empty.proto\"%\n\x08PageInfo\x12\n\n\x02pn\x18\x01 \x01(\r\x12\r\n\x05pSize\x18\x02 \x01(\r\"\x1f\n\rMobileRequest\x12\x0e\n\x06mobile\x18\x01 \x01(\t\"D\n\x0e\x43reateUserInfo\x12\x10\n\x08nickName\x18\x01 \x01(\t\x12\x10\n\x08passWord\x18\x02 \x01(\t\x12\x0e\n\x06mobile\x18\x03 \x01(\t\"P\n\x0eUpdateUserInfo\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x10\n\x08nickName\x18\x02 \x01(\t\x12\x0e\n\x06gender\x18\x03 \x01(\t\x12\x10\n\x08\x62irthDay\x18\x04 \x01(\x04\"\x0b\n\tIdRequest\"\x82\x01\n\x10UserInfoResponse\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x10\n\x08passWord\x18\x02 \x01(\t\x12\x0e\n\x06mobile\x18\x03 \x01(\t\x12\x10\n\x08nickName\x18\x04 \x01(\t\x12\x10\n\x08\x62irthDay\x18\x05 \x01(\x04\x12\x0e\n\x06gender\x18\x06 \x01(\t\x12\x0c\n\x04role\x18\x07 \x01(\x05\"?\n\x10UserListResponse\x12\n\n\x02id\x18\x01 \x01(\r\x12\x1f\n\x04\x64\x61ta\x18\x02 \x03(\x0b\x32\x11.UserInfoResponse2\x80\x02\n\x04User\x12+\n\x0bGetUserList\x12\t.PageInfo\x1a\x11.UserListResponse\x12\x34\n\x0fGetUserByMobile\x12\x0e.MobileRequest\x1a\x11.UserInfoResponse\x12,\n\x0bGetUserById\x12\n.IdRequest\x1a\x11.UserInfoResponse\x12\x30\n\nCreateUser\x12\x0f.CreateUserInfo\x1a\x11.UserInfoResponse\x12\x35\n\nUpdateUser\x12\x0f.UpdateUserInfo\x1a\x16.google.protobuf.EmptyB\x0cZ\nuser/protob\x06proto3'
+  serialized_pb=b'\n\nuser.proto\x1a\x1bgoogle/protobuf/empty.proto\"%\n\x08PageInfo\x12\n\n\x02pn\x18\x01 \x01(\r\x12\r\n\x05pSize\x18\x02 \x01(\r\"\x1f\n\rMobileRequest\x12\x0e\n\x06mobile\x18\x01 \x01(\t\"D\n\x0e\x43reateUserInfo\x12\x10\n\x08nickName\x18\x01 \x01(\t\x12\x10\n\x08passWord\x18\x02 \x01(\t\x12\x0e\n\x06mobile\x18\x03 \x01(\t\"P\n\x0eUpdateUserInfo\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x10\n\x08nickName\x18\x02 \x01(\t\x12\x0e\n\x06gender\x18\x03 \x01(\t\x12\x10\n\x08\x62irthDay\x18\x04 \x01(\x04\"\x0b\n\tIdRequest\"\x82\x01\n\x10UserInfoResponse\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x10\n\x08passWord\x18\x02 \x01(\t\x12\x0e\n\x06mobile\x18\x03 \x01(\t\x12\x10\n\x08nickName\x18\x04 \x01(\t\x12\x10\n\x08\x62irthDay\x18\x05 \x01(\x04\x12\x0e\n\x06gender\x18\x06 \x01(\t\x12\x0c\n\x04role\x18\x07 \x01(\x05\"B\n\x10UserListResponse\x12\r\n\x05total\x18\x01 \x01(\r\x12\x1f\n\x04\x64\x61ta\x18\x02 \x03(\x0b\x32\x11.UserInfoResponse2\x80\x02\n\x04User\x12+\n\x0bGetUserList\x12\t.PageInfo\x1a\x11.UserListResponse\x12\x34\n\x0fGetUserByMobile\x12\x0e.MobileRequest\x1a\x11.UserInfoResponse\x12,\n\x0bGetUserById\x12\n.IdRequest\x1a\x11.UserInfoResponse\x12\x30\n\nCreateUser\x12\x0f.CreateUserInfo\x1a\x11.UserInfoResponse\x12\x35\n\nUpdateUser\x12\x0f.UpdateUserInfo\x1a\x16.google.protobuf.EmptyB\x0cZ\nuser/protob\x06proto3'
   ,
   dependencies=[google_dot_protobuf_dot_empty__pb2.DESCRIPTOR,])
 
@@ -305,7 +305,7 @@ _USERLISTRESPONSE = _descriptor.Descriptor(
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='id', full_name='UserListResponse.id', index=0,
+      name='total', full_name='UserListResponse.total', index=0,
       number=1, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -331,7 +331,7 @@ _USERLISTRESPONSE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=413,
-  serialized_end=476,
+  serialized_end=479,
 )
 
 _USERLISTRESPONSE.fields_by_name['data'].message_type = _USERINFORESPONSE
@@ -403,8 +403,8 @@ _USER = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=479,
-  serialized_end=735,
+  serialized_start=482,
+  serialized_end=738,
   methods=[
   _descriptor.MethodDescriptor(
     name='GetUserList',

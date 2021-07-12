@@ -49,6 +49,6 @@ message UserInfoResponse {
 }
 
 message UserListResponse {
-  uint32                    id   = 1;
-  repeated UserInfoResponse data = 2;
+  uint32                    total = 1;
+  repeated UserInfoResponse data  = 2;
 }
