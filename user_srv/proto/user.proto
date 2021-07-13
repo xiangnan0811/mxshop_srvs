@@ -35,7 +35,7 @@ message UpdateUserInfo {
 }
 
 message IdRequest {
-
+  int32 id = 1;
 }
 
 message UserInfoResponse {

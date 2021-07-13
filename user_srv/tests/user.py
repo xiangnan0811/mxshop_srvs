@@ -23,7 +23,12 @@ class UserTest:
         for user in rsp.data:
             print(user.mobile, user.birthDay)
 
+    def get_user_by_id(self, _id):
+        rsp: user_pb2.UserInfoResponse = self.stub.GetUserById(user_pb2.IdRequest(id=_id))
+        print(rsp.mobile)
+
 
 if __name__ == '__main__':
     user_test = UserTest()
-    user_test.user_list()
+    # user_test.user_list()
+    user_test.get_user_by_id(1)
