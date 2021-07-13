@@ -7,11 +7,13 @@
 @Description : 
 """
 import time
+from datetime import date
 
 import grpc
 from loguru import logger
 from peewee import DoesNotExist
 from passlib.hash import pbkdf2_sha256
+from google.protobuf import empty_pb2
 
 from user_srv.model.models import User
 from user_srv.proto import user_pb2, user_pb2_grpc
@@ -20,6 +22,7 @@ from user_srv.proto import user_pb2, user_pb2_grpc
 class UserServicer(user_pb2_grpc.UserServicer):
     """用户服务"""
 
+    @staticmethod
     def convert_user_to_rsp(self, user):
         """转换 user 对象"""
         user_info_rsp = user_pb2.UserInfoResponse()
@@ -94,3 +97,18 @@ class UserServicer(user_pb2_grpc.UserServicer):
         user.save()
 
         return self.convert_user_to_rsp(user)
+
+    @logger.catch
+    def UpdateUser(self, request: user_pb2.UpdateUserInfo, context):
+        """更新用户"""
+        try:
+            user = User.get(User.id == request.id)
+            user.nickname = request.nickName
+            user.gender = request.gender
+            user.birthday = date.fromtimestamp(user.birthDay)
+            user.save()
+            return empty_pb2.Empty()
+        except DoesNotExist:
+            context.set_code(grpc.StatusCode.NOT_FOUND)
+            context.set_details("用户不存在！")
+            return user_pb2.UserInfoResponse()
