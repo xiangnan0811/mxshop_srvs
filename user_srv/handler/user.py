@@ -11,6 +11,7 @@ import time
 import grpc
 from loguru import logger
 from peewee import DoesNotExist
+from passlib.hash import pbkdf2_sha256
 
 from user_srv.model.models import User
 from user_srv.proto import user_pb2, user_pb2_grpc
@@ -75,4 +76,21 @@ class UserServicer(user_pb2_grpc.UserServicer):
             context.set_details("用户不存在!")
             return user_pb2.UserInfoResponse()
 
+    @logger.catch
+    def CreateUser(self, request: user_pb2.CreateUserInfo, context):
+        """创建用户"""
+        try:
+            User.get(User.mobile == request.mobile)
+            context.set_code(grpc.StatusCode.ALREADY_EXISTS)
+            context.set_details("用户已存在!")
+            return user_pb2.UserInfoResponse()
+        except DoesNotExist as e:
+            pass
 
+        user = User()
+        user.nickname = request.nickName
+        user.mobile = request.mobile
+        user.password = pbkdf2_sha256.hash(request.passWord)
+        user.save()
+
+        return self.convert_user_to_rsp(user)

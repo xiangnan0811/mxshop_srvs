@@ -27,8 +27,17 @@ class UserTest:
         rsp: user_pb2.UserInfoResponse = self.stub.GetUserById(user_pb2.IdRequest(id=_id))
         print(rsp.mobile)
 
+    def create_user(self, nickname, mobile, password):
+        rsp: user_pb2.UserInfoResponse = self.stub.CreateUser(user_pb2.CreateUserInfo(
+            nickName=nickname,
+            mobile=mobile,
+            passWord=password
+        ))
+        print(rsp.id)
+
 
 if __name__ == '__main__':
     user_test = UserTest()
     # user_test.user_list()
-    user_test.get_user_by_id(1)
+    # user_test.get_user_by_id(1)
+    user_test.create_user("xiangnan001", "18822222222", 'admin111')
