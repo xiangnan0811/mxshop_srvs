@@ -116,5 +116,7 @@ dmypy.json
 .idea
 .vscode
 
+# project files
 logs/
 .DS_Store
+Pipfile.lock
