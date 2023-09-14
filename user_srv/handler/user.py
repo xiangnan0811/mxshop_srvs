@@ -23,7 +23,7 @@ class UserServicer(user_pb2_grpc.UserServicer):
     """用户服务"""
 
     @staticmethod
-    def convert_user_to_rsp(self, user):
+    def convert_user_to_rsp(user):
         """转换 user 对象"""
         user_info_rsp = user_pb2.UserInfoResponse()
         user_info_rsp.id = user.id

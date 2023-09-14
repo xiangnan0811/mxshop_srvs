@@ -47,7 +47,17 @@ def serve():
     )
     args = parser.parse_args()
     # 日志文件
-    logger.add("logs/user_srv_{time}.log", format="{time:YYYY-MM-DD HH:MM:SS} | {level} | {message}", encoding="utf-8")
+    logger.add(
+        "logs/user_srv.log",
+        format="{time:YYYY-MM-DD HH:MM:SS} | {level} | {message}",
+        encoding="utf-8",
+        rotation="00:00",
+        retention="30 days",
+        enqueue=True,
+        diagnose=True,
+        backtrace=True,
+        compression="zip",
+    )
     # grpc服务
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     user_pb2_grpc.add_UserServicer_to_server(UserServicer(), server)
