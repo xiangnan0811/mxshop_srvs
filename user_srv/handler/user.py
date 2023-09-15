@@ -41,6 +41,7 @@ class UserServicer(user_pb2_grpc.UserServicer):
     @logger.catch
     def GetUserList(self, request: user_pb2.PageInfo, context):
         """获取用户列表"""
+        logger.info(f"请求用户列表：page: {request.pn}, size: {request.pSize}")
         rsp = user_pb2.UserListResponse()
 
         users = User.select()
@@ -60,6 +61,7 @@ class UserServicer(user_pb2_grpc.UserServicer):
     @logger.catch
     def GetUserById(self, request: user_pb2.IdRequest, context):
         """通过 id 查询用户"""
+        logger.info(f"通过 id 查询用户：id: {request.id}")
         try:
             user = User.get(User.id == request.id)
             return self.convert_user_to_rsp(user)
@@ -71,6 +73,7 @@ class UserServicer(user_pb2_grpc.UserServicer):
     @logger.catch
     def GetUserByMobile(self, request: user_pb2.MobileRequest, context):
         """通过 mobile 查询用户"""
+        logger.info(f"通过 mobile 查询用户：mobile: {request.mobile}")
         try:
             user = User.get(User.mobile == request.mobile)
             return self.convert_user_to_rsp(user)
@@ -82,6 +85,7 @@ class UserServicer(user_pb2_grpc.UserServicer):
     @logger.catch
     def CreateUser(self, request: user_pb2.CreateUserInfo, context):
         """创建用户"""
+        logger.info(f"创建用户: mobile: {request.mobile}")
         try:
             User.get(User.mobile == request.mobile)
             context.set_code(grpc.StatusCode.ALREADY_EXISTS)
@@ -101,6 +105,7 @@ class UserServicer(user_pb2_grpc.UserServicer):
     @logger.catch
     def UpdateUser(self, request: user_pb2.UpdateUserInfo, context):
         """更新用户"""
+        logger.info(f"更新用户: name: {request.nickName}")
         try:
             user = User.get(User.id == request.id)
             user.nickname = request.nickName
@@ -112,3 +117,15 @@ class UserServicer(user_pb2_grpc.UserServicer):
             context.set_code(grpc.StatusCode.NOT_FOUND)
             context.set_details("用户不存在！")
             return user_pb2.UserInfoResponse()
+
+    @logger.catch
+    def CheckPassWord(
+        self,
+        request: user_pb2.PassWordCheckRequest,
+        context
+    ) -> user_pb2.PassWordCheckResponse:
+        """校验密码"""
+        logger.info(f"校验密码: password: {request.password}")
+        return user_pb2.PassWordCheckResponse(
+            success=pbkdf2_sha256.verify(request.password, request.encryptedPassword)
+        )

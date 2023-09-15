@@ -6,6 +6,20 @@ from typing import ClassVar as _ClassVar, Iterable as _Iterable, Mapping as _Map
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
+class PassWordCheckRequest(_message.Message):
+    __slots__ = ["password", "encryptedPassword"]
+    PASSWORD_FIELD_NUMBER: _ClassVar[int]
+    ENCRYPTEDPASSWORD_FIELD_NUMBER: _ClassVar[int]
+    password: str
+    encryptedPassword: str
+    def __init__(self, password: _Optional[str] = ..., encryptedPassword: _Optional[str] = ...) -> None: ...
+
+class PassWordCheckResponse(_message.Message):
+    __slots__ = ["success"]
+    SUCCESS_FIELD_NUMBER: _ClassVar[int]
+    success: bool
+    def __init__(self, success: bool = ...) -> None: ...
+
 class PageInfo(_message.Message):
     __slots__ = ["pn", "pSize"]
     PN_FIELD_NUMBER: _ClassVar[int]

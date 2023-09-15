@@ -40,6 +40,11 @@ class UserStub(object):
                 request_serializer=user__pb2.UpdateUserInfo.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 )
+        self.CheckPassWord = channel.unary_unary(
+                '/User/CheckPassWord',
+                request_serializer=user__pb2.PassWordCheckRequest.SerializeToString,
+                response_deserializer=user__pb2.PassWordCheckResponse.FromString,
+                )
 
 
 class UserServicer(object):
@@ -80,6 +85,13 @@ class UserServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def CheckPassWord(self, request, context):
+        """检查密码
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_UserServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -107,6 +119,11 @@ def add_UserServicer_to_server(servicer, server):
                     servicer.UpdateUser,
                     request_deserializer=user__pb2.UpdateUserInfo.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+            ),
+            'CheckPassWord': grpc.unary_unary_rpc_method_handler(
+                    servicer.CheckPassWord,
+                    request_deserializer=user__pb2.PassWordCheckRequest.FromString,
+                    response_serializer=user__pb2.PassWordCheckResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -200,5 +217,22 @@ class User(object):
         return grpc.experimental.unary_unary(request, target, '/User/UpdateUser',
             user__pb2.UpdateUserInfo.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def CheckPassWord(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/User/CheckPassWord',
+            user__pb2.PassWordCheckRequest.SerializeToString,
+            user__pb2.PassWordCheckResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

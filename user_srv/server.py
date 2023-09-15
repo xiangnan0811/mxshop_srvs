@@ -57,6 +57,7 @@ def serve():
         diagnose=True,
         backtrace=True,
         compression="zip",
+        level="DEBUG"
     )
     # grpc服务
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
