@@ -21,6 +21,8 @@ sys.path.insert(0, BASE_DIR)
 
 from user_srv.proto import user_pb2, user_pb2_grpc
 from user_srv.handler.user import UserServicer
+from common.grpc_health.v1 import health_pb2_grpc, health_pb2
+from common.grpc_health.v1 import health
 
 
 def on_exit(signal, frame):
@@ -35,7 +37,7 @@ def serve():
         "--host",
         nargs="?",
         type=str,
-        default="127.0.0.1",
+        default="0.0.0.0",
         help="binding host"
     )
     parser.add_argument(
@@ -61,7 +63,11 @@ def serve():
     )
     # grpc服务
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+    # 注册用户服务
     user_pb2_grpc.add_UserServicer_to_server(UserServicer(), server)
+    # 注册健康检查服务
+    health_pb2_grpc.add_HealthServicer_to_server(health.HealthServicer(), server)
+    # 绑定端口
     server.add_insecure_port(f'{args.host}:{args.port}')
 
     # 主进程退出信号监听 并优雅退出
