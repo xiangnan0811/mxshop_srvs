@@ -6,11 +6,11 @@
 @Version     : python 3.8.5
 @Description : 
 """
-import os
-import sys
-import signal
-import logging
 import argparse
+import logging
+import os
+import signal
+import sys
 from concurrent import futures
 
 import grpc
@@ -19,10 +19,12 @@ from loguru import logger
 BASE_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.insert(0, BASE_DIR)
 
-from user_srv.proto import user_pb2, user_pb2_grpc
+from user_srv.proto import user_pb2_grpc
 from user_srv.handler.user import UserServicer
-from common.grpc_health.v1 import health_pb2_grpc, health_pb2
+from common.grpc_health.v1 import health_pb2_grpc
 from common.grpc_health.v1 import health
+from common.register.consul import ConsulRegister
+from user_srv.settings import settings
 
 
 def on_exit(signal, frame):
@@ -37,7 +39,7 @@ def serve():
         "--host",
         nargs="?",
         type=str,
-        default="0.0.0.0",
+        default="127.0.0.1",
         help="binding host"
     )
     parser.add_argument(
@@ -75,6 +77,23 @@ def serve():
     signal.signal(signal.SIGTERM, on_exit)              # kill
     logger.info(f"启动服务：{args.host}:{args.port}")
     server.start()
+
+    # 注册服务
+    logger.info(f"注册 {settings.USER_SRV_NAME} 服务到 consul：{settings.CONSUL_HOST}:{settings.CONSUL_PORT}")
+    consul_register = ConsulRegister(settings.CONSUL_HOST, settings.CONSUL_PORT)
+    if not consul_register.register(
+        name=settings.USER_SRV_NAME,
+        id=settings.USER_SRV_NAME,
+        address=args.host,
+        port=args.port,
+        tags=settings.USER_SRV_TAGS,
+        check=None
+    ):
+        logger.error(f"注册服务失败！")
+        sys.exit(0)
+    logger.info(f"注册 {settings.USER_SRV_NAME} 服务成功！")
+
+    logger.info(f"所有服务启动完成!")
     server.wait_for_termination()
 
 

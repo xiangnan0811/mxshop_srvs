@@ -11,6 +11,8 @@ grpcio = '1.54.0'
 grpcio-tools = '1.54.0'
 protobuf = '4.22.3'
 loguru = '0.7.0'
+python-consul2 = "0.1.5"
+pipreqs = "0.4.13"
 
 [dev-packages]
 black = "22.8.0"

@@ -17,6 +17,7 @@ class ReconnectMySQLDatabase(ReconnectMixin, PooledMySQLDatabase):
         pass
 
 
+# mysql配置
 MYSQL_DB = "mxshop_user_srv"
 MYSQL_HOST = os.getenv('MYSQL_HOST')
 MYSQL_PORT = int(os.getenv('MYSQL_PORT'))
@@ -30,3 +31,11 @@ DB = ReconnectMySQLDatabase(
     user=MYSQL_USER,
     password=MYSQL_PASSWORD,
 )
+
+# consul配置
+CONSUL_HOST = os.getenv('CONSUL_HOST')
+CONSUL_PORT = int(os.getenv('CONSUL_PORT'))
+
+# 服务相关配置
+USER_SRV_NAME = "user-srv"
+USER_SRV_TAGS = ["user", "srv", "Python"]
